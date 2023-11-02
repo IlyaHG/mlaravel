@@ -13,20 +13,24 @@ use function Laravel\Prompts\error;
 
 class AuthController extends Controller
 {
+    //Делай либо док блоки, либо возвращай типы у методов
     public function showLoginForm()
     {
         return view('auth.login');
     }
     public function login (AuthFormRequest $request)
     {
-        $data = ([
+        /*$data = ([
             'email' => $request->email,
             'password'=>$request->password
         ]);
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();*/
+        // Тут можно без этого обойтись
+        
+        $data = $request->validated();
 
         if(auth('web')->attempt($data)){
-            return redirect(route('profile', $user->id));
+            return redirect(route('profile', /*$user->id*/ auth('web')->user()->id;
         }
         return redirect(route('login'))->withErrors(["email" => "Пользователь не найден, либо данные введены неправильно"]);
     }
@@ -43,8 +47,8 @@ class AuthController extends Controller
             "email"=>$request->email,
             "password"=>bcrypt($request->password),
             "data-filter-tag"=> $request->email,
-            "status" => 'success',
-            "avatar" => "0",
+            "status" => 'success',//По хорошему бы сделать под эту второстипенную инфу отдельную таблицу, создать модель UserProfile
+            "avatar" => "0",// ну и соответственно связь
             "phone" => "0",
             "address" => "0",
             "instagram" => "instagram",
