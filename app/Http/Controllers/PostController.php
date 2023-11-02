@@ -20,7 +20,7 @@ class PostController extends Controller
     public function showPostForm($id)
     {
         $post = Post::findOrFail($id);
-        $user = $post->user;
+        $user = $post->user;// Зачем тут дополнительная переменная, у тебя же есть связь
         return view('posts.post', ['post' => $post, 'user' => $user]);
     }
 
@@ -48,12 +48,15 @@ class PostController extends Controller
     public function create_post($id, CreatePostFromRequest $request)
     {
             $postData = $request->validated();
-            $postImage = $request->file('image');
-            $postImageName = uniqid() . "." . $postImage->extension();
+        
+            //$postImage = $request->file('image');
+            //$postImageName = uniqid() . "." . $postImage->extension();
+            //$postImage->storeAs('public/images/PostsImages', $postImageName);
+            //$postData['thumbnail'] = $postImageName;
+        //Без всего этого тоже можно обойтись, метод store() сам всё сгенерит и сохранит куда надо, но
+        //при условии что в env в FILESYSTEM_DISK=public 
 
-            $postImage->storeAs('public/images/PostsImages', $postImageName);
-
-            $postData['thumbnail'] = $postImageName;
+            $postData['thumbnail'] = $request->file('image')->store();
             $postData['user_id'] = $request->user_id;
 
             $user = User::find($id);
