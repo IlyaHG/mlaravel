@@ -36,8 +36,6 @@ class PostController extends Controller
         return redirect(route('posts.post', $id));
     }
 
-//dd($user->IsAuthor(auth()->id(),4));
-//dd($user->IsAdmin(auth()->id()));
     public function delete_post($id, User $user)
     {
         $post = Post::find($id);
