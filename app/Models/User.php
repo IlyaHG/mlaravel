@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
         "data-filter-tag",
         "status",
-        "avatar" ,
+        "avatar",
         "phone",
         "address",
         "instagram",
@@ -52,8 +52,65 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
     public function posts()
     {
-     return $this->hasMany(Post::class)->orderBy('created_at');
+        return $this->hasMany(Post::class)->orderBy('created_at');
+    }
+
+    public function IsAdmin($id)
+    {
+        $user = User::find($id);
+
+        if ($user->IsAdmin == 'true') {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function IsAuthor($user_id, $post_user_id)
+    {
+        if ($user_id == $post_user_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function is_current_user($user_id)
+    {
+        if (auth()->id() == $user_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function delete_user_avatar($image_name)
+    {
+        if (file_exists(public_path('storage/images/avatars/' . $image_name))) {
+            unlink(public_path('storage/images/avatars/' . $image_name));
+        }
+    }
+
+    public function admin_or_current($auth_id, $user_id)
+    {
+        if ($this->IsAdmin($auth_id) || $this->is_current_user($user_id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function admin_or_author($auth_id, $post_user_id)
+    {
+        if ($this->IsAdmin($auth_id) || $this->IsAuthor($auth_id, $post_user_id)) {
+            return true;
+        } else {
+            return false;
+
+        }
     }
 }

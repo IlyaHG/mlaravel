@@ -19,152 +19,163 @@ class UserController extends Controller
     {
 
         $user = User::find($id);
-        return view('user.profile',['user'=>$user]);
+        return view('user.profile', ['user' => $user]);
     }
-    public function deleteUser($id)
+
+    public function delete_user($id)
     {
-
-       $user = User::find($id);
-        if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true'){
-
-            if(file_exists(public_path('storage/images/avatars/'.$user->avatar))){
-                unlink(public_path('storage/images/avatars/'.$user->avatar));
-            }
-            $user->delete();
-            return redirect(route('login'));
-        }else{
-            session()->put('error','У вас нет прав на удаление пользователя');
+        $user = User::find($id);
+        if (!$user->admin_or_current(auth()->id(),$id)) {
+            session()->put('error', 'У вас нет прав на удаление пользователя');
             return redirect(route('home'));
         }
 
+        $user->delete_user_avatar($user->thumbnail);
+        $user->delete();
+
+        return redirect(route('login'));
     }
 
 //    Статус
-    public function showStatusForm ($id)
+    public function show_status_form($id)
     {
+
         $user = User::find($id);
-        if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true') {
-            return view('user.status', ['user' => $user]);
-        }else{
-            session()->put('error','У вас нет прав на смену статуса другим пользователям');
+        if (!$user->admin_or_current(auth()->id(),$id))  {
+            session()->put('error', 'У вас нет прав на смену статуса другим пользователям');
             return redirect(route('home'));
         }
+        return view('user.status', ['user' => $user]);
     }
 
     public function status(Request $request)
     {
+        define('Онлайн', 'success');
+        define('Отошел', 'warning');
+        define('Не беспокоить', 'danger');
 
-        if($request->status == "Онлайн"){
-             $status = "success";
-        }elseif($request->status == "Отошел"){
-             $status = 'warning';
-        }else{
+        if ($request->status == "Онлайн") {
+            $status = "success";
+        } elseif ($request->status == "Отошел") {
+            $status = 'warning';
+        } else {
             $request->status == "Не беспокоить";
-             $status = 'danger';
+            $status = 'danger';
         }
-     $user = User::find($request->id);
+
+        $user = User::find($request->id);
         $user->status = $status;
         $user->save();
 
-        session()->put('success','Статус успешно изменен');
+        session()->put('success', 'Статус успешно изменен');
         return redirect(route('home'));
     }
 
 
 // Редактирование Профиля
-    public function  showEditForm($id)
+    public function show_edit_form($id)
     {
         $user = User::find($id);
-        if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true') {
-            return view('user.edit', ['user' => $user]);
-        }else {
+        if (!$user->admin_or_current(auth()->id(),$id)) {
+
             session()->put('error', 'У вас нет прав на редактирование данных другого пользователя');
             return redirect(route('home'));
         }
+        return view('user.edit', ['user' => $user]);
+
     }
-    public function  edit($id,Request $request)
+
+    public
+    function edit($id, Request $request)
     {
 
-            if ($request->status == "Онлайн") {
-                $status = "success";
-            } elseif ($request->status == "Отошел") {
-                $status = 'warning';
-            } else {
-                $request->status == "Не беспокоить";
-                $status = 'danger';
-            }
+        if ($request->status == "Онлайн") {
+            $status = "success";
+        } elseif ($request->status == "Отошел") {
+            $status = 'warning';
+        } else {
+            $request->status == "Не беспокоить";
+            $status = 'danger';
+        }
 
-            $validatedData = $request->validate([
-                'name' => ['string'],
-                'role' => ['string'],
-                'phone' => ['string'],
-                'address' => ['string'],
-                'vk' => ['string'],
-                'instagram' => ['string'],
-                'telegram' => ['string']]);
+        $validatedData = $request->validate([
+            'name' => ['string'],
+            'role' => ['string'],
+            'phone' => ['string'],
+            'address' => ['string'],
+            'vk' => ['string'],
+            'instagram' => ['string'],
+            'telegram' => ['string']]);
 
-            User::find($id)->update(array_merge($validatedData, ['status' => $status]));
-            session()->put('success', 'Профиль успешно обновлен');
-            return redirect(route('home'));
+        User::find($id)->update(array_merge($validatedData, ['status' => $status]));
+        session()->put('success', 'Профиль успешно обновлен');
+        return redirect(route('home'));
 
 
     }
 
 // Установка Аватара
 
-    public function  showUploadAvatarForm($id)
+    public
+    function show_upload_avatar_form($id)
     {
         $user = User::find($id);
-        if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true') {
 
-            return view('user.upload_avatar', ['user' => $user]);
-        }else{
-            session()->put('error','У вас нет прав на смену аватара другого пользователя');
+        if (!$user->admin_or_current(auth()->id(),$id)) {
+            session()->put('error', 'У вас нет прав на смену аватара другого пользователя');
             return redirect(route('home'));
         }
+        return view('user.upload_avatar', ['user' => $user]);
+
     }
-    public function  uploadAvatarProcess($id,Request $request)
+
+    public
+    function upload_avatar_process($id, Request $request)
     {
         $user = User::find($id);
-        if(file_exists(public_path('storage/images/avatars/'.$user->avatar))){
-          unlink(public_path('storage/images/avatars/'.$user->avatar));
-        }
+        $user->delete_user_avatar($user->avatar);
 
-        $avatar = $request->avatar;
-        $avatarName = uniqid().".".$avatar->extension();
-        $avatar->move(public_path('storage/images/avatars'),$avatarName);
+        $new_avatar = $request->file('avatar');
 
-        $user->update(['avatar'=>$avatarName]);
-        session()->put('success','Аватар установлен успешно');
+        $new_avatar->store('/public/images/avatars/');
+
+        $user_avatar = $new_avatar->hashName();
+
+        $user->update(['avatar' => $user_avatar]);
+        session()->put('success', 'Аватар установлен успешно');
         return redirect()->back();
 
-
     }
+
 // Смена Пароля
 
-    public function showChangePasswordForm($id)
+    public
+    function show_change_password_form($id)
     {
         $user = User::find($id);
-        if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true') {
-       return view('user.change_password',['user'=>$user]);
-    }else{
-            session()->put('error','У вас нет прав');
+        if (!$user->admin_or_current(auth()->id(),$id)) {
+            session()->put('error', 'У вас нет прав');
             return redirect(route('home'));
         }
+        return view('user.change_password', ['user' => $user]);
+
     }
-    protected function changePassword_process($id,changePasswordFormRequest $request)
+
+    protected
+    function change_password_process($id, ChangePasswordFormRequest $request)
     {
-        $user =  User::find($id);
-        if(!Hash::check($request->current_password,$user->password)){
-            return back()->withErrors(['current_password'=>'Текущий пароль неверный']);
+        $user = User::find($id);
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Текущий пароль неверный']);
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
 
-        session()->put('success','Профиль успешно обновлен');
-        return redirect(route('profile',$user->id));
+        session()->put('success', 'Профиль успешно обновлен');
+        return redirect(route('profile', $user->id));
     }
+
 
 }
 

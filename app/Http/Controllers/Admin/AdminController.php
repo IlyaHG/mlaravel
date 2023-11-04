@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function showCreateUserForm()
+    public function show_create_user_form()
     {
         return view('foradmin.create_user');
     }

@@ -34,6 +34,9 @@
                                 <a href="{{route('posts.post',$post->id)}}" class="btn btn-primary btn-block">
                                     Посмотреть
                                 </a>
+                                <a href="{{route('posts.edit',$post->id)}}" class="btn btn-info btn-block">
+                                    Редактировать
+                                </a>
                                 <a href="{{route('delete_post',$post->id)}}" class="btn btn-danger btn-block">
                                     Удалить
                                 </a>

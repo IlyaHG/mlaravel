@@ -9,7 +9,7 @@
                 <i class='subheader-icon fal fa-sun'></i> Установить статус
             </h1>
         </div>
-        <form action="{{route('status_process',$user->id)}}" method="Post">
+        <form action="{{route('status_process', $user->id)}}" method="Post">
             @csrf
             <div class="row">
                 <div class="col-xl-6">

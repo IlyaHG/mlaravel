@@ -16,7 +16,7 @@ class IndexController extends Controller
         return view('users', ['users'=>$users]);
     }
 
-    public function showContactForm()
+    public function show_contact_form()
     {
         return view('mail.contacts_form');
     }

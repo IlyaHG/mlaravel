@@ -22,4 +22,10 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function delete_image($image_name)
+    {
+        if (file_exists(public_path('storage/images/PostImages/' . $image_name))) {
+            unlink(public_path('storage/images/PostImages/' . $image_name));
+        }
+    }
 }

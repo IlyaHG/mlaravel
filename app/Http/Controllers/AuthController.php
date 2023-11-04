@@ -13,7 +13,7 @@ use function Laravel\Prompts\error;
 
 class AuthController extends Controller
 {
-    public function showLoginForm()
+    public function show_login_form()
     {
         return view('auth.login');
     }
@@ -31,7 +31,7 @@ class AuthController extends Controller
         return redirect(route('login'))->withErrors(["email" => "Пользователь не найден, либо данные введены неправильно"]);
     }
 
-    public function showRegisterForm()
+    public function show_register_form()
     {
         return view('auth.register');
     }
@@ -63,7 +63,7 @@ class AuthController extends Controller
         return redirect(route('login'));
     }
 
-    public function showForgotForm()
+    public function show_forgot_form()
     {
         return view('auth.forgot_form');
     }

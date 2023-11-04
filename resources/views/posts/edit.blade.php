@@ -1,5 +1,5 @@
 @extends('layout.layout')
-@section('title','Создание поста')
+@section('title','Изменение поста')
 @section('content')
     @include('partials.navbar')
     <div class="row">
@@ -18,28 +18,31 @@
                         </div>
                     @endif
                     <div class="panel-hdr">
-                        <h2 class="text-center">Новый пост</h2>
+                        <h2 class="text-center">Ваш пост</h2>
                     </div>
 
-                    <form action="{{route('create_process',auth()->id())}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('edit_process',$post->id)}}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <div class="panel-content">
                             <!-- username -->
                             <div class="form-group ">
                                 <label class="form-label" >Заголовок</label>
-                                <input type="text" name="title" class="form-control @error('email') border-danger @enderror">
+                                <input type="text" name="title" class="form-control @error('email') border-danger @enderror" value="{{$post->title}}">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" >Краткое описание</label>
-                                <input type="hidden" name='id' value="{{auth()->id()}}">
-                                <input type="text" name="preview" class="form-control @error('email') border-danger @enderror">
+                                <input type="text" name="preview" class="form-control @error('email') border-danger @enderror" value="{{$post->preview}}">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" >Содержание</label>
-                                <input type="text" name="description" class="form-control @error('email') border-danger @enderror">
+                                <input type="text" name="description" class="form-control @error('email') border-danger @enderror" value="{{$post->description}}">
+                            </div>
+
+                            <div class="form-group">
+                                <img src="/storage/images/PostsImages/{{$post->thumbnail}}" alt="Картинка вашего поста" class="img-responsive" width="200">
                             </div>
 
                             <div class="form-group">
