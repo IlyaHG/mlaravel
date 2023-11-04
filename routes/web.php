@@ -13,7 +13,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');
-    Route::get('delete_profile/{id}',[UserController::class,'delete_user'])->name('user.delete');
+    Route::get('delete_profile/{id}',[UserController::class,'delete'])->name('user.delete');
 
     Route::get('/profile/{id}/edit', [UserController::class, 'show_edit_form'])->name('user.edit');
     Route::post('/profile/edit_process/{id}', [UserController::class, 'edit'])->name('edit_process');
@@ -27,12 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/upload_avatar/{id}', [UserController::class, 'show_upload_avatar_form'])->name('upload_avatar');
     Route::post('/upload_avatar_process/{id}', [UserController::class, 'upload_avatar_process'])->name('upload_avatar_process');
 
-    Route::get('/create_post/user/{id}', [PostController::class, 'show_create_post_form'])->name('posts.create');
-    Route::post('/create_post_process/{id}', [PostController::class, 'create_post'])->name('create_process');
+    Route::get('/create_post/user/{id}', [PostController::class, 'show_create_form'])->name('posts.create');
+    Route::post('/create_post_process/{id}', [PostController::class, 'create'])->name('create_process');
 
 
-    Route::get('/posts', [PostController::class, 'show_posts_form'])->name('posts');
-    Route::get('/posts/{id}', [PostController::class, 'show_post_form'])->name('posts.post');
+    Route::get('/posts', [PostController::class, 'show_all_posts'])->name('posts');
+    Route::get('/posts/{id}', [PostController::class, 'show_form'])->name('posts.post');
     Route::post('/posts/comment/{id}', [PostController::class, 'comment'])->name('comment');
 
     Route::get('/post_edit/{id}', [PostController::class, 'show_edit_form'])->name('posts.edit');

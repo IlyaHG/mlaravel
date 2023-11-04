@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    public function show_posts_form()
+    public function show_all_posts()
     {
         $posts = Post::orderBy('created_at', "DESC")->paginate(3);
         return view('posts.posts', ['posts' => $posts]);
     }
 
-    public function show_post_form($id)
+    public function show_form($id)
     {
         $post = Post::findOrFail($id);
         $user = $post->user;
@@ -36,9 +36,7 @@ class PostController extends Controller
         return redirect(route('posts.post', $id));
     }
 
-//dd($user->IsAuthor(auth()->id(),4));
-//dd($user->IsAdmin(auth()->id()));
-    public function delete_post($id, User $user)
+    public function delete($id, User $user)
     {
         $post = Post::find($id);
         if (!($user->admin_or_author(auth()->id(), $post->user_id))) {
@@ -52,7 +50,7 @@ class PostController extends Controller
     }
 
 
-    public function show_create_post_form($id, User $user)
+    public function show_create_form($id, User $user)
     {
         if (!$user->admin_or_current(auth()->id(), $id)) {
             session()->put('error', 'У вас нет прав писать пост от лица другого пользователя');
@@ -61,7 +59,7 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function create_post($id, CreatePostFromRequest $request)
+    public function create($id, CreatePostFromRequest $request)
     {
         $postData = $request->validated();
         $postImage = $request->file('image');
@@ -91,7 +89,7 @@ class PostController extends Controller
 
     }
 
-    public function edit_post($id, EditPostFormRequest $request)
+    public function edit($id, EditPostFormRequest $request)
     {
         $post = Post::find($id);
 

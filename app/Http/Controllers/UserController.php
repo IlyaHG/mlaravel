@@ -22,7 +22,7 @@ class UserController extends Controller
         return view('user.profile', ['user' => $user]);
     }
 
-    public function delete_user($id)
+    public function delete($id)
     {
         $user = User::find($id);
         if (!$user->admin_or_current(auth()->id(),$id)) {
