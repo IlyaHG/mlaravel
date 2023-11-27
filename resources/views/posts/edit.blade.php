@@ -21,7 +21,7 @@
                         <h2 class="text-center">Ваш пост</h2>
                     </div>
 
-                    <form action="{{route('edit_process',$post->id)}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('post_edit_process',$post->id)}}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <div class="panel-content">
