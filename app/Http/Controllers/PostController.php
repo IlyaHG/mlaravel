@@ -64,7 +64,7 @@ class PostController extends Controller
         $postData = $request->validated();
         $postImage = $request->file('image');
 
-        $postImage->store('public/images/PostsImages', $postData);
+        $postImage->store('/images/PostsImages', $postData);
         $postData['thumbnail'] = $postImage->hashName();
 
         $user = User::find($id);
@@ -89,7 +89,7 @@ class PostController extends Controller
 
     }
 
-    public function edit($id, EditPostFormRequest $request)
+    public function edit_post($id, EditPostFormRequest $request)
     {
         $post = Post::find($id);
 
@@ -97,7 +97,7 @@ class PostController extends Controller
 
         $postData = $request->validated();
         $postImage = $request->file('image');
-        $postImage->store('public/images/PostsImages', $postData);
+        $postImage->store('/images/PostsImages', $postData);
         $postData['thumbnail'] = $postImage->hashName();
 
         DB::table('posts')

@@ -89,12 +89,12 @@ class UserController extends Controller
     function edit($id, Request $request)
     {
 
-        if ($request->status == "Онлайн") {
+        if ($request->status == User::STATUS_ONLINE) {
             $status = "success";
-        } elseif ($request->status == "Отошел") {
+        } elseif ($request->status == User::STATUS_AWAY) {
             $status = 'warning';
         } else {
-            $request->status == "Не беспокоить";
+            $request->status == User::STATUS_DO_NOT_DISTURB;
             $status = 'danger';
         }
 
@@ -133,18 +133,17 @@ class UserController extends Controller
     function upload_avatar_process($id, Request $request)
     {
         $user = User::find($id);
+
         $user->delete_user_avatar($user->avatar);
 
         $new_avatar = $request->file('avatar');
+//dd($new_avatar->store('/images/avatars/'));
 
-        $new_avatar->store('/public/images/avatars/');
+        $new_avatar->store('/images/avatars/');
+        $user->update(['avatar' => $new_avatar->hashName()]);
 
-        $user_avatar = $new_avatar->hashName();
-
-        $user->update(['avatar' => $user_avatar]);
         session()->put('success', 'Аватар установлен успешно');
         return redirect()->back();
-
     }
 
 // Смена Пароля

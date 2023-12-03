@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/comment/{id}', [PostController::class, 'comment'])->name('comment');
 
     Route::get('/post_edit/{id}', [PostController::class, 'show_edit_form'])->name('posts.edit');
-    Route::post('/post_edit_process/{id}', [PostController::class, 'edit_post'])->name('edit_process');
+    Route::post('/post_edit_process/{id}', [PostController::class, 'edit_post'])->name('post_edit_process');
 
     Route::get('/delele_post/{id}', [PostController::class, 'delete_post'])->name('delete_post');
 

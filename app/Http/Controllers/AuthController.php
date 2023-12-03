@@ -50,7 +50,7 @@ class AuthController extends Controller
             "instagram" => "instagram",
             "telegram" =>"telegram",
             "vk" =>"vk",
-            "isAdmin"=>'no',
+            "is_admin"=>'no',
             "role"=>"role",
         ]);
         session()->put('success','Регистрация успешна');

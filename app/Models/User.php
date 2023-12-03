@@ -12,11 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    const STATUS_ONLINE = 'success';
+    const STATUS_AWAY = 'warning';
+    const STATUS_DO_NOT_DISTURB = "danger";
     protected $fillable = [
         'name',
         'email',
@@ -29,7 +27,7 @@ class User extends Authenticatable
         "instagram",
         "telegram",
         "vk",
-        "isAdmin",
+        "is_admin",
         "role",
     ];
 
@@ -58,19 +56,18 @@ class User extends Authenticatable
         return $this->hasMany(Post::class)->orderBy('created_at');
     }
 
-    public function IsAdmin($id)
+    public function is_admin($id)
     {
         $user = User::find($id);
 
-        if ($user->IsAdmin == 'true') {
+        if ($user->is_admin == 'true') {
             return true;
         } else {
             return false;
         }
-
     }
 
-    public function IsAuthor($user_id, $post_user_id)
+    public function is_author($user_id, $post_user_id)
     {
         if ($user_id == $post_user_id) {
             return true;
@@ -97,7 +94,7 @@ class User extends Authenticatable
 
     public function admin_or_current($auth_id, $user_id)
     {
-        if ($this->IsAdmin($auth_id) || $this->is_current_user($user_id)) {
+        if ($this->is_admin($auth_id) || $this->is_current_user($user_id)) {
             return true;
         } else {
             return false;
@@ -106,11 +103,11 @@ class User extends Authenticatable
 
     public function admin_or_author($auth_id, $post_user_id)
     {
-        if ($this->IsAdmin($auth_id) || $this->IsAuthor($auth_id, $post_user_id)) {
+        if ($this->is_admin($auth_id) || $this->is_author($auth_id, $post_user_id)) {
             return true;
         } else {
             return false;
-
         }
     }
+
 }

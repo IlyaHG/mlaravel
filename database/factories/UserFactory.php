@@ -30,7 +30,7 @@ class UserFactory extends Factory
             "address" => fake()->streetAddress(),
             "instagram" => "instagram",
             "telegram" =>"telegram",
-            "IsAdmin"=>'no',
+            "is_admin"=>'no',
             "vk" =>"vk",
             "role"=>"role",
         ];

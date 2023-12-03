@@ -66,7 +66,7 @@
                             <div class="col-12">
                                 <div class="p-3 text-center">
                                     <a href="tel:{{$user->phone}}" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                        <i class="fas fa-mobile-alt text-muted mr-2"></i> +1 317-456-2564</a>
+                                        <i class="fas fa-mobile-alt text-muted mr-2"></i> {{$user->phone}}</a>
                                     <a href="mailto:{{$user->email}}" class="mt-1 d-block fs-sm fw-400 text-dark">
                                         <i class="fas fa-mouse-pointer text-muted mr-2"></i> {{$user->email}}</a>
                                     <address class="fs-sm fw-400 mt-4 text-muted">

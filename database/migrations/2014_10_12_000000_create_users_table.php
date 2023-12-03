@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string("telegram");
             $table->string("vk");
             $table->string("role");
-            $table->string('IsAdmin');
+            $table->string('is_admin');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
             $table->rememberToken();

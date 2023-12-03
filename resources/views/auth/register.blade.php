@@ -47,31 +47,47 @@
 
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Имя</label>
-                                            <input type="email" name="name" class="form-control" placeholder="Ваше Имя">
+                                            <input type="email" name="name" class="form-control @error('name') border-danger @enderror" placeholder="Ваше Имя">
                                             <div class="invalid-feedback">Заполните поле.</div>
                                         </div>
+                                        @error('name')
+                                        <p class="text-danger">{{$message}}</p>
+                                        @enderror
 
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>
-                                            <input type="email" name="email" class="form-control"
+                                            <input type="email" name="email"  class="form-control @error('email') border-danger @enderror"
                                                    placeholder="Эл. адрес">
                                             <div class="invalid-feedback">Заполните поле.</div>
                                             <div class="help-block">Эл. адрес будет вашим логином при авторизации</div>
                                         </div>
 
+                                        @error('email')
+                                        <p class="text-danger"> {{$message}}</p>
+                                        @enderror
+
                                         <div class="form-group">
                                             <label class="form-label" for="userpassword">Пароль <br></label>
-                                            <input type="password" name="password" class="form-control"
-                                                   placeholder="Ваш пароль">
+                                            <input type="password" name="password" class="form-control @error('password') border-danger @enderror"
+                                                   placeholder="Ваш пароль" required>
                                             <div class="invalid-feedback">Заполните поле.</div>
                                         </div>
 
+                                        @error('password')
+                                        <p class="text-danger"> {{$message}}</p>
+                                        @enderror
+
+
                                         <div class="form-group">
                                             <label class="form-label" for="userpassword">Повторите пароль <br></label>
-                                            <input type="password" name="password_confirmation" class="form-control"
+                                            <input type="password" name="password_confirmation" class="form-control @error('password_confirm') border-danger @enderror"
                                                    placeholder="Повторите ваш пароль">
                                             <div class="invalid-feedback">Заполните поле.</div>
                                         </div>
+
+                                        @error('password_confirm')
+                                        <p class="text-danger"> {{$message}}</p>
+                                        @enderror
 
                                         <div class="row no-gutters">
                                             <div class="col-md-4 ml-auto text-right">
