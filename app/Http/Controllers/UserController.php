@@ -104,7 +104,7 @@ class UserController extends Controller
             $status = 'danger';
         }
 
-        $validatedData = $request->validate([
+        $data = $request->validate([
             'name' => ['string'],
             'role' => ['string'],
             'phone' => ['string'],
@@ -113,10 +113,8 @@ class UserController extends Controller
             'instagram' => ['string'],
             'telegram' => ['string']]);
 
-        User::find($id)->update(array_merge($validatedData, ['status' => $status]));
-        session()->put('success', 'Профиль успешно обновлен');
-        return redirect(route('home'));
-
+        $user=User::find($id);
+        return $user->edit($user->id, $data,$status);
 
     }
 

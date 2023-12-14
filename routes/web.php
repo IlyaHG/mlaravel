@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/users', [IndexController::class, 'index'])->name('home');
+    Route::get('/home', [IndexController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');

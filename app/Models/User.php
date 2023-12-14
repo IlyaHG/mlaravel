@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -51,11 +52,27 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    # Users relations
     public function posts()
     {
         return $this->hasMany(Post::class)->orderBy('created_at');
     }
 
+
+    # User changes
+
+    public
+    function edit($id, $data, $status)
+    {
+
+        User::find($id)->update(array_merge($data, ['status' => $status]));
+        session()->put('success', 'Профиль успешно обновлен');
+        return redirect(route('home'));
+
+
+    }
+
+    # Users privileges functions
     public function is_admin($id)
     {
         $user = User::find($id);
@@ -109,5 +126,7 @@ class User extends Authenticatable
             return false;
         }
     }
+
+
 
 }

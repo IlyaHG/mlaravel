@@ -8,13 +8,13 @@
     @if(session()->has('success'))
     <div class="alert alert-success">
         {{session()->get('success')}}
-        {{session()->forget()}}
+        {{session()->forget('success')}}
     </div>
     @endif
         @if(session()->has('error'))
             <div class="alert alert-danger">
                 {{session()->get('error')}}
-                {{session()->forget()}}
+                {{session()->forget('error')}}
             </div>
         @endif
 
@@ -91,15 +91,14 @@
                                     Загрузить аватар
                                 </a>
 
-                                <form method="POST" action="{{ route('user.delete', $user->id) }}" id="delete-form">
+                                <form action="{{route('user.delete',$user->id)}}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure?');">
+                                    <button type="submit" class="dropdown-item" onclick="return confirm('are you sure?');">
                                         <i class="fa fa-window-close"></i>
                                         Удалить
                                     </button>
                                 </form>
-
 
                             </div>
                             @endif
