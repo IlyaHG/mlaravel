@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PostController;
@@ -9,11 +10,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/home', [IndexController::class, 'index'])->name('home');
+    Route::get('/users', [IndexController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');
-    Route::get('delete_profile/{id}',[UserController::class,'delete'])->name('user.delete');
+    Route::delete('delete_profile/{id}',[UserController::class,'delete'])->name('user.delete');
 
     Route::get('/profile/{id}/edit', [UserController::class, 'show_edit_form'])->name('user.edit');
     Route::post('/profile/edit_process/{id}', [UserController::class, 'edit'])->name('edit_process');
@@ -40,8 +41,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/delele_post/{id}', [PostController::class, 'delete_post'])->name('delete_post');
 
-    Route::get('/create_user', [\App\Http\Controllers\Admin\AdminController::class, 'show_create_user_form'])->name('create_user');
-    Route::post('/create_user_process', [\App\Http\Controllers\Admin\AdminController::class, 'create_user_process'])->name('create_user_process');
+    Route::get('/create_user', [AdminController::class, 'show_create_user_form'])->name('create_user');
+    Route::post('/create_user_process', [AdminController::class, 'create_user_process'])->name('create_user_process');
 
 
 

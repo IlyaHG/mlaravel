@@ -8,13 +8,13 @@
     @if(session()->has('success'))
     <div class="alert alert-success">
         {{session()->get('success')}}
-        {{session()->forget('success')}}
+        {{session()->forget()}}
     </div>
     @endif
         @if(session()->has('error'))
             <div class="alert alert-danger">
                 {{session()->get('error')}}
-                {{session()->forget('error')}}
+                {{session()->forget()}}
             </div>
         @endif
 
@@ -26,7 +26,7 @@
 
     <div class="row">
         <div class="col-xl-12">
-            @if(auth()->user()->IsAdmin == 'true')
+            @if(auth()->user()->is_admin == 'true')
             <a class="btn btn-success" href="{{route('create_user')}}">Добавить</a>
             @endif
             <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
@@ -71,14 +71,14 @@
 
                             <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                 {{$user->name}}
-                                @if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true')
+                                @if((auth()->id() == $user->id) || auth()->user()->is_admin == 'true')
                                 <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                 <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                 @endif
                             </a>
 
 
-                            @if((auth()->id() == $user->id) || auth()->user()->IsAdmin == 'true')
+                            @if((auth()->id() == $user->id) || auth()->user()->is_admin == 'true')
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{route('posts.create',$user->id)}}">
                                     <i class="fa fa-sun"></i>
@@ -91,10 +91,15 @@
                                     Загрузить аватар
                                 </a>
 
-                                <a href="{{route('user.delete',$user->id)}}" class="dropdown-item" onclick="return confirm('are you sure?');">
-                                    <i class="fa fa-window-close"></i>
-                                    Удалить
-                                </a>
+                                <form method="POST" action="{{ route('user.delete', $user->id) }}" id="delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure?');">
+                                        <i class="fa fa-window-close"></i>
+                                        Удалить
+                                    </button>
+                                </form>
+
 
                             </div>
                             @endif

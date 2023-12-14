@@ -30,6 +30,12 @@ class UserController extends Controller
             return redirect(route('home'));
         }
 
+        if ($user->is_admin(auth()->id())) {
+            $user->delete_user_avatar($user->thumbnail);
+            $user->delete();
+            session()->put('success', 'Пользователь успешно удален');
+            return redirect(route('home'));
+        }
         $user->delete_user_avatar($user->thumbnail);
         $user->delete();
 
