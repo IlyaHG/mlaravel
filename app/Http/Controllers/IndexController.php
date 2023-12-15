@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Mail;
 
 class IndexController extends Controller
 {
-    public function index()
+    public function index(WeatherController $weatherController)
     {
+        $weatherData = $weatherController->getWeatherData();
         $users = User::get();
-        return view('users', ['users'=>$users]);
+        return view('users', ['users' => $users, 'weatherData' => $weatherData]);
     }
 
     public function show_contact_form()

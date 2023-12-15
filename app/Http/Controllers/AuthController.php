@@ -7,9 +7,10 @@ use App\Http\Requests\ForgotFormRequest;
 use App\Http\Requests\RegisterFormRequest;
 use App\Mail\ForgotPassword;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use function Laravel\Prompts\error;
+use Laravel\Socialite\Facades\Socialite;
+
 
 class AuthController extends Controller
 {
@@ -78,5 +79,30 @@ class AuthController extends Controller
         Mail::to($request->email)->send(new ForgotPassword($newPassword,$userName));
         session()->put('success','Ваш пароль был изменен, зайдите на указанный электронный адрес');
         return redirect(route('login'));
+    }
+
+
+    public function github()
+    {
+        return Socialite::driver('github')->redirect();
+    }
+
+    public function githubCallback(): \Illuminate\Http\RedirectResponse
+    {
+        $githubUser = Socialite::driver('github')->stateless()->user();
+
+        $user = User::query()->updateOrCreate([
+            'github_id' => $githubUser->id,
+        ], [
+            'name' => $githubUser->name,
+            'email' => $githubUser->email,
+            'password'=>bcrypt(str()->random(20)),
+            'github_token' => $githubUser->token,
+            'github_refresh_token' => $githubUser->refreshToken,
+        ]);
+
+        auth()->login($user);
+        return redirect()
+            ->intended(route('profile', $user->id));
     }
 }

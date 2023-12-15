@@ -1,0 +1,17 @@
+.account-social-link-github{
+    background: #000000;
+    color: #ffffff;
+}
+.account-social-link-github:hover{
+    color: #000000;
+    background: #ffffff;
+}
+
+.account-social-link-google{
+    background: #ff0000;
+    color: #ffffff;
+}
+.account-social-link-google:hover{
+    color: #ff0000;
+    background: #ffffff;
+}

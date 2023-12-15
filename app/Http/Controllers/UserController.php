@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\changePasswordFormRequest;
+use App\Http\Requests\ChangePasswordFormRequest;
 use App\Http\Requests\EditFormRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,22 +22,11 @@ class UserController extends Controller
         return view('user.profile', ['user' => $user]);
     }
 
-    public function delete($id)
+    public function delete_user($id)
     {
         $user = User::find($id);
-        if (!$user->admin_or_current(auth()->id(),$id)) {
-            session()->put('error', 'У вас нет прав на удаление пользователя');
-            return redirect(route('home'));
-        }
 
-        if ($user->is_admin(auth()->id())) {
-            $user->delete_user_avatar($user->thumbnail);
-            $user->delete();
-            session()->put('success', 'Пользователь успешно удален');
-            return redirect(route('home'));
-        }
-        $user->delete_user_avatar($user->thumbnail);
-        $user->delete();
+        $user->delete_User($id);
 
         return redirect(route('login'));
     }
@@ -54,27 +43,17 @@ class UserController extends Controller
         return view('user.status', ['user' => $user]);
     }
 
-    public function status(Request $request)
+    public function change_status(Request $request)
     {
-        define('Онлайн', 'success');
-        define('Отошел', 'warning');
-        define('Не беспокоить', 'danger');
+        $user_id = $request->id;
+        $new_status = $request->status;
 
-        if ($request->status == "Онлайн") {
-            $status = "success";
-        } elseif ($request->status == "Отошел") {
-            $status = 'warning';
-        } else {
-            $request->status == "Не беспокоить";
-            $status = 'danger';
-        }
+        $user = User::find($user_id);
 
-        $user = User::find($request->id);
-        $user->status = $status;
-        $user->save();
+        $user->change_status($user_id,$new_status);
 
-        session()->put('success', 'Статус успешно изменен');
         return redirect(route('home'));
+
     }
 
 
@@ -141,7 +120,6 @@ class UserController extends Controller
         $user->delete_user_avatar($user->avatar);
 
         $new_avatar = $request->file('avatar');
-//dd($new_avatar->store('/images/avatars/'));
 
         $new_avatar->store('/images/avatars/');
         $user->update(['avatar' => $new_avatar->hashName()]);
@@ -168,14 +146,10 @@ class UserController extends Controller
     function change_password_process($id, ChangePasswordFormRequest $request)
     {
         $user = User::find($id);
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Текущий пароль неверный']);
-        }
+        $current_password = $request->current_password;
+        $new_password = $request->new_password;
 
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        session()->put('success', 'Профиль успешно обновлен');
+        $user->change_password($user->id,$current_password,$new_password);
         return redirect(route('profile', $user->id));
     }
 

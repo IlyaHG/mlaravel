@@ -14,7 +14,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');
-    Route::delete('delete_profile/{id}',[UserController::class,'delete'])->name('user.delete');
+    Route::delete('delete_profile/{id}',[UserController::class,'delete_user'])->name('user.delete');
 
     Route::get('/profile/{id}/edit', [UserController::class, 'show_edit_form'])->name('user.edit');
     Route::post('/profile/edit_process/{id}', [UserController::class, 'edit'])->name('edit_process');
@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/change_password_process/{id}', [UserController::class, 'change_password_process'])->name('change_password_process');
 
     Route::get('/status/{id}', [UserController::class, 'show_status_form'])->name('status');
-    Route::post('/profile/status_process/{id}', [UserController::class, 'status'])->name('status_process');
+    Route::post('/profile/status_process/{id}', [UserController::class, 'change_status'])->name('status_process');
 
     Route::get('/upload_avatar/{id}', [UserController::class, 'show_upload_avatar_form'])->name('upload_avatar');
     Route::post('/upload_avatar_process/{id}', [UserController::class, 'upload_avatar_process'])->name('upload_avatar_process');
@@ -62,6 +62,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/contacts',[IndexController::class, 'show_contact_form'])->name('contacts');
     Route::post('/contacts_process',[IndexController::class, 'contacts_process'])->name('contacts_process');
 
+// Socialite
+    Route::get('/auth/socialite/redirect',[AuthController::class ,'github'])
+        ->name('socialite.github');
+
+    Route::get('/auth/socialite/github/callback', [AuthController::class ,'githubCallback'])
+        ->name('socialite.callback');
 
 });
 

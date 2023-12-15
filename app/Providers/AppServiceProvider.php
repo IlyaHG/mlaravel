@@ -10,11 +10,12 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->bind(OpenWeatherServiceProvider::class, function ($app) {
+            return new OpenWeatherServiceProvider('92ef8b6ec0963401d10e62eb2da52d73');
+        });
     }
-
     /**
      * Bootstrap any application services.
      */

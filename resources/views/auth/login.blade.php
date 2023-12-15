@@ -42,8 +42,11 @@
                 @enderror
 
                 <div class="text-center">
+                    <a class="btn account-social-link-google" target="_blank" href="{{route('socialite.github')}}">Google</a>
                     <button type="submit" class="btn btn-default btn-inline-block">Войти</button>
+                    <a class="btn account-social-link-github" target="_blank" href="{{route('socialite.github')}}">GitHub</a>
                 </div>
+
             </form>
             <div class="text-center">
                 <a href="{{route('forgot_password')}}">Забыли пароль?</a>

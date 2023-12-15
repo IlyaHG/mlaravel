@@ -5,24 +5,27 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
-class GismeteoServiceProvider extends ServiceProvider
+class OpenWeatherServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     */
-    public function register(): void
+   protected $apiKey;
+
+   public function __construct($apiKey)
+   {
+      $this->apiKey = $apiKey;
+   }
+
+    public function getWeatherByCity($city)
     {
-        //
+        $response = Http::get('http://api.openweathermap.org/data/2.5/weather', [
+            'q' => $city,
+            'appid' => $this->apiKey,
+            'units' => 'metric',
+            'lang' => 'ru'
+        ]);
+
+        $weatherData = $response->json();
+
+        return $weatherData;
     }
 
-    /**
-     * Bootstrap services.
-     */
-//    public function boot(): void
-//    {
-//        Http::fake([
-//            'api.gismeteo.com/*' => Http::response('...', 200, ['Default' => '92ef8b6ec0963401d10e62eb2da52d73
-//']),
-//        ]);
-//    }
 }
