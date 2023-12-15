@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class changePasswordFormRequest extends FormRequest
+class ChangePasswordFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,12 +19,14 @@ class changePasswordFormRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
             'email'=>['string','email'],
-            'current_password' => ['string','min:4'],
+            'current_password' => ['string'],
             'password'=>['string','min:4','confirmed']
         ];
     }
+}
 }
